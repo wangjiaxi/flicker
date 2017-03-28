@@ -22,11 +22,6 @@ LibBufferObject *
 lib_buffer_create(struct evbuffer *buffer)
 {
 
-    if(buffer == NULL){
-        PyErr_Format(PyExc_TypeError, "can't read %d bytes from the buffer");
-        return NULL;
-    }
-
     LibBufferObject *result = (LibBufferObject *)LibBufferType.tp_alloc(&LibBufferType, 0);
     if (result == NULL) {
         return NULL;
@@ -70,15 +65,17 @@ lib_buffer_dealloc(LibBufferObject *self, PyObject *args)
 }
 
 
-static void
+static PyObject *
 lib_buffer_lock(LibBufferObject *self, PyObject *args){
     evbuffer_lock(self->buffer);
+    Py_RETURN_NONE;
 }
 
 
-static void
+static PyObject *
 lib_buffer_unlock(LibBufferObject *self, PyObject *args){
     evbuffer_unlock(self->buffer);
+    Py_RETURN_NONE;
 }
 
 
@@ -195,7 +192,7 @@ lib_buffer_readln(LibBufferObject *self, PyObject *args)
         Py_RETURN_NONE;
 
     data = evbuffer_readln(self->buffer, &size, flags);
-    if (data < 0) {
+    if (data == NULL) {
         result = PyBytes_FromString("");
     } else {
         result = PyBytes_FromStringAndSize(data, size);
@@ -205,6 +202,27 @@ lib_buffer_readln(LibBufferObject *self, PyObject *args)
 }
 
 
+static PySequenceMethods
+lib_buffer_as_seq = {
+    (lenfunc)get_buffer_length,  /*sq_length*/
+    NULL,  /*sq_concat*/
+    NULL,  /*sq_repeat*/
+    NULL,  /*sq_item*/
+    NULL,  /*sq_slice*/
+    NULL,  /*sq_ass_item*/
+    NULL,  /*sq_ass_slice*/
+    NULL,  /*sq_contains*/
+    NULL,  /*sq_inplace_concat*/
+    NULL   /*sq_inplace_repeat*/
+};
+
+
+static PyMappingMethods
+lib_buffer_as_mapping = {
+	(lenfunc)get_buffer_length,  /*mp_length*/
+	NULL,  /*mp_subscript*/
+	NULL,  /*mp_ass_subscript*/
+};
 
 
 
@@ -256,8 +274,8 @@ PyTypeObject LibBufferType = {
     0,                    /* tp_reserved */
     0,                    /* tp_repr */
     0,                    /* tp_as_number */
-    0,                    /* tp_as_sequence */
-    0,                    /* tp_as_mapping */
+    &lib_buffer_as_seq,     /* tp_as_sequence */
+    &lib_buffer_as_mapping,                    /* tp_as_mapping */
     0,                    /* tp_hash */
     0,                    /* tp_call */
     0,                    /* tp_str */
