@@ -9,8 +9,6 @@ class HttpHandler(object):
         self.query = self.request.query
 
     def distribute(self, *args, **kwargs):
-        print(self.request.args)
-        print(self.request.method.lower())
         return getattr(self, self.request.method.lower())(*args, **kwargs)
 
     def get_method(self):
