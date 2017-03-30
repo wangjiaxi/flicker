@@ -11,6 +11,8 @@ class HttpRequest(object):
         self.body = body
         self._cookie = _cookie
         self.query = self.parse_query()
+        self.args = tuple()      # save the arguments that passed by request url
+        self.kwargs = dict()      # save the arguments that passed by request url
 
     def set_cookie(self, name, value):
         self._cookie[name] = value

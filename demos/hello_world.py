@@ -1,11 +1,11 @@
 import sys
 import os
+sys.path.append(os.path.abspath(".."))
+
 from flicker.base import HTTP_200_Code
 from flicker.httphandler import HttpHandler
 from flicker.web import Application
 from flicker.httpserver import HttpServer
-
-
 
 
 web = Application()

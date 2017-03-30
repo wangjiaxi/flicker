@@ -2,6 +2,7 @@ import logging
 import re
 from http import cookies
 
+
 def parse_http_headers(headers):
     """
     :param headers: list[header]
@@ -45,7 +46,7 @@ def parse_http_message(buffer):
             _cookie = cookies.SimpleCookie()
 
     except ValueError as e:
-        logging.error("Parse http message error: %s, buffer is not standard http message" % (e))
+        logging.error("Parse http message error: %s, buffer is not standard http message" % e)
         return None
 
     return {

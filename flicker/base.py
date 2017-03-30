@@ -81,7 +81,7 @@ STATUS_CODE = {
     HTTP_404_Code: "Not Found",
     HTTP_405_Code: "Method Not Allowed",
     HTTP_406_Code: "Not Acceptable",
-    HTTP_406_Code: "Proxy Authentication Required",
+    HTTP_407_Code: "Proxy Authentication Required",
     HTTP_408_Code: "Request Timeout",
     HTTP_409_Code: "Conflict",
     HTTP_410_Code: "Gone",
