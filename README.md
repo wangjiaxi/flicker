@@ -83,6 +83,13 @@ Application
 ### libevent
 extended the libevent module of c
 
+
+# install
+##### install libevent
+`cd flicker/libevent & python setup.py install`
+##### install flicker
+`python setup.py  install`
+ 
 ### contact
 <progwong@gmail.com>
 
