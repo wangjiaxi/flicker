@@ -1,2 +1,3 @@
+
 class HTTPError(Exception):
     pass

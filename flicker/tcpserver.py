@@ -30,6 +30,7 @@ class TcpServer(object):
         self.sock.setblocking(blocking)
 
     def start(self):
+        """start the server"""
         self.sock.bind((self.host, self.port))
         self.sock.listen(self.listen_n)
         self.event = libevent.Event(self.base, self.sock.fileno(),
@@ -41,6 +42,7 @@ class TcpServer(object):
         return conn.recv(self.read_chunk_size)
 
     def do_accept(self, event, sock_fd, what, _sock):
+        """deal events"""
         if what & libevent.EV_READ:
             conn, addr = _sock.accept()
             self.distribute(self.read_from_sock(conn), conn, addr)

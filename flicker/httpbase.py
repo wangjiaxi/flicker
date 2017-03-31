@@ -1,5 +1,7 @@
 from urllib import parse
 from flicker.base import STATUS_CODE
+from flicker.base import HTTP_400_Code
+
 
 class HttpRequest(object):
 
@@ -11,14 +13,18 @@ class HttpRequest(object):
         self.body = body
         self._cookie = _cookie
         self.query = self.parse_query()
-        self.args = tuple()      # save the arguments that passed by request url
-        self.kwargs = dict()      # save the arguments that passed by request url
+        self.args = None      # save the arguments that passed by request url
+        self.kwargs = None      # save the arguments that passed by request url
 
     def set_cookie(self, name, value):
         self._cookie[name] = value
 
     def get_cookie(self, name):
         return self._cookie[name]
+
+    @property
+    def _cookies(self):
+        return self._cookie.output()
 
     def set_headers(self, name, value):
         self.headers[name] = value
@@ -47,7 +53,7 @@ class HttpsRequest(HttpRequest):
 
 
 class HttpResponse(object):
-    def __init__(self, sock, address, protocol):
+    def __init__(self, sock, address, protocol="HTTP/1.0"):
         self.sock = sock
         self.address = address
         self.protocol = protocol
@@ -123,3 +129,10 @@ class HttpConnection(object):
         self.response.headers = self.request.headers
         self.response._cookie = self.request._cookie
         return self.response.send_response()
+
+
+def _send_error_response(conn, status_code, message):
+    response = HttpResponse(conn, None)
+    response.status_code = status_code
+    response.message = message
+    response.send_response()

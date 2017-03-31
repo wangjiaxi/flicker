@@ -13,7 +13,7 @@ class HttpServer(TcpServer):
         if not handler_class:
             # url path not exist
             return http_conn.send_message(
-                    HTTP_404_Code, STATUS_CODE.get(HTTP_404_Code))
+                HTTP_404_Code, STATUS_CODE.get(HTTP_404_Code))
 
         return handler_class(http_conn).distribute()
 

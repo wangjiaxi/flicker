@@ -1,9 +1,10 @@
-# flicker
-python web server, based on libevent
+# Flicker
+flicker is a Python web framework , based on libevent. using non-blocking network I/O
+flicker is Pythonic framework, easily write a web service and code is easy understand
 
-easy create a http server
+# Hello world
 ```
-# hello world
+
 from flicker.base import HTTP_200_Code
 from flicker.httphandler import HttpHandler
 from flicker.web import Application
@@ -11,18 +12,67 @@ from flicker.httpserver import HttpServer
 
 
 
-
 web = Application()
 
 
-@web.route("/")
+@web.route(r"/")
 class TestHandler(HttpHandler):
     def get(self, *args, **kwargs):
-        print("test get method \n")
-        self.write(HTTP_200_Code, "<h1>hello world</h1>")
+        self.write(HTTP_200_Code, "<h1>Hello world</h1>")
 
 
 server = HttpServer("localhost", 8000, web)
 server.start()
 ```
+
+flicker have the flies as
+
+#### tcpserver.py/httpserver.py
+ * TcpServer define a basic tcp server that use libevent
+
+ * HttpServer is subclass of tcp server, listen and deal http request
+
+#### httpbase.py
+  **HttpRequest**
+    headers
+    _cookie
+    path
+    protocol
+    query
+    body
+  **HttpResponse**
+    sock
+    protocol
+    message
+    headers
+    _cookie
+    address
+    status_code
+  **HttpConnect**
+    request
+    address
+    response
+    protocol
+    message
+    headers
+    _cookie
+
+#### httphandler.py
+  **HttpHandler**
+    set_header
+    get_header
+    set_cookie
+    get_cookie
+    cookies
+    get
+    post
+    ...
+#### web.py
+   **Application**
+
+
+#### libevent
+**extended the libevent module of c**
+
+**contact <progwong@gmail.com>**
 

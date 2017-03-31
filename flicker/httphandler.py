@@ -14,6 +14,19 @@ class HttpHandler(object):
     def get_method(self):
         pass
 
+    def set_cookie(self, name, value):
+        self.request.set_cookie(name, value)
+
+    def get_cookie(self, name):
+        self.request.get_cookie(name)
+
+    @property
+    def _cookies(self):
+        """
+        :rtype  str
+        """
+        return self.request._cookies
+
     def set_headers(self, key, value):
         return self.request.set_headers(self, key, value)
 
@@ -24,6 +37,7 @@ class HttpHandler(object):
         return self.request.get_header(name)
 
     def write(self, status_code, message):
+        """send http response"""
         return self.connection.send_message(status_code, message)
 
     def get(self, *args, **kwargs):
